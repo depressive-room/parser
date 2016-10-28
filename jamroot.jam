@@ -1,0 +1,2 @@
+exe parser : src/parser.cpp src/parser.hpp src/Node.hpp src/Node.cpp ;
+install inst-parser : parser : <location>build/bin ;
