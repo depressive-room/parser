@@ -1,2 +1,2 @@
-exe parser : src/parser.cpp src/parser.hpp src/Node.hpp src/Node.cpp ;
+exe parser : [ glob-tree *.cpp *.hpp : ] ;
 install inst-parser : parser : <location>build/bin ;
