@@ -1,6 +1,2 @@
-project parser
-    : usage-requirements <include>.
-    ; 
-
-lib parser : [ glob-tree *.cpp *.hpp : ] : <link>static ;
-install inst-parser : parser : <location>build/bin ;
+exe parser_debug : [ glob-tree *.cpp *.hpp : ] /home/alexey/Parser/Parser//parser ;
+install install_parser_debug : parser_debug : <location>build/bin ;
