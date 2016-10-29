@@ -1,2 +1,6 @@
-exe parser : [ glob-tree *.cpp *.hpp : ] ;
+project parser
+    : usage-requirements <include>.
+    ; 
+
+lib parser : [ glob-tree *.cpp *.hpp : ] : <link>static ;
 install inst-parser : parser : <location>build/bin ;

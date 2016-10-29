@@ -7,6 +7,7 @@
 
 std::vector<std::string> take_tokins(std::string input)
 {
+
     boost::trim(input);
     std::regex tag_regex("<(/?[^\>]+)>");
     std::vector<std::string> result;
@@ -44,14 +45,3 @@ std::vector<std::string> take_tokins(std::string input)
  return result;
 }
 
-void make_tree(std::vector<std::string>){
-
-}
-
-int main(){
-    std::vector<std::string> test = take_tokins("<html><head><title>MEGA TITLE</title></head><body>ololo<a href='http://ya.ru'>dddd</a></body></html>");
-    for(int i = 0; i < test.size(); i++){
-        std::cout<<test[i]<<std::endl<<std::endl;
-    }
-    return 0;
-}
