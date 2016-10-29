@@ -2,9 +2,9 @@
 
 Иерархия папок:
 
-   root folder
-	|
-	|-----Parser
+   >root folder
+	>|
+	>|-----Parser
 	|	|
 	|	|-----jamroot.jam
 	|	|
