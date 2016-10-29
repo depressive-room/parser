@@ -1,2 +1,2 @@
-exe parser_debug : [ glob-tree *.cpp *.hpp : ] /home/alexey/Parser/Parser//parser ;
+exe parser_debug : [ glob-tree *.cpp *.hpp : ] ../Parser//parser ;
 install install_parser_debug : parser_debug : <location>build/bin ;
