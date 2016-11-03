@@ -1,48 +1,66 @@
 #include <iostream>
 #include <vector>
 #include <regex>
-#include <boost/algorithm/string.hpp>
+#include <Node.hpp>
 #include "parser.hpp"
-#include <unistd.h>
 namespace Parser{
-	std::vector<std::string> take_tokins(std::string input)
-	{
+    void parse(std::shared_ptr<std::string> input)
+    {
+        std::shared_ptr<Node::Base> root = std::make_shared<Node::Base>();
+        std::shared_ptr<Node::Base> curr(root);
 
-	    boost::trim(input);
-	    std::regex tag_regex("<(/?[^\>]+)>");
-	    std::vector<std::string> result;
-	    while(!input.empty()) {
-		boost::trim(input);
-		auto str_begin =
-		    std::sregex_iterator(input.begin(), input.end(), tag_regex);
-		auto str_end = std::sregex_iterator();
+        std::regex reg("<(/?[^\>]+)>");
+        auto str_begin =
+            std::sregex_iterator(input->begin(), input->end(), reg);
+        auto str_end = std::sregex_iterator();
 
-		std::sregex_iterator i = str_begin;
-		if(i != str_end){
-		std::smatch match = *i;
-		std::string match_str = match.str();
-		if(match.position() == 0){
-		    input.erase(0,match_str.size());
-			match_str += "1";
-		    result.push_back(match_str);
-		}else{
-		    std::string tmp;
-		    int j;
-		    for(j = 0;j<match.position();j++){
-		        tmp+=input[j];
-		    };
-		    input.erase(0,j);
-			tmp += "0";
-		    result.push_back(tmp);
-			std::string t;
-			t = match_str + "1";
-		    result.push_back(t);
-		    input.erase(0,match_str.size());
-		}
-	    }
+        std::sregex_iterator i = str_begin;
+        int last_pos = 0;
+        for(;!(i==str_end);i++){
 
-	}
-	 return result;
-	}
+            curr->children = new std::vector<std::shared_ptr<Node::Base>>;
+
+             std::smatch match = *i;
+             std::string match_str = match.str();
+             int pos = match.position();
+             if(pos-last_pos!= 0){
+                 std::string text_str = input->substr(last_pos,pos-last_pos);
+                 std::shared_ptr<Node::Text> text = std::make_shared<Node::Text>(text_str);
+                 std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(text);
+                    curr->children->push_back(base);
+             }
+             std::shared_ptr<Node::Tag> tag = std::make_shared<Node::Tag>(match_str);
+             std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(tag);
+             curr->children->push_back(base);
+
+             curr = curr->children->at(0);
+             last_pos = match.position()+match_str.size();
+
+        }
+    }
+
+}
+
+
+int main()
+{
+
+//    std::vector<std::shared_ptr<Node::Attr>> *attrs = new std::vector<std::shared_ptr<Node::Attr>>;
+//    attrs->push_back(std::make_shared<Node::Attr>("src","img.jpg"));
+//    attrs->push_back(std::make_shared<Node::Attr>("href","ya.ru"));
+//    std::shared_ptr<Node::Tag> tag = std::make_shared<Node::Tag>("a",attrs);
+//    std::shared_ptr<Node::Base> t1 = std::make_shared<Node::Base>(tag);
+//    std::shared_ptr<Node::Tag> tag2 = std::make_shared<Node::Tag>("b");
+//    std::shared_ptr<Node::Base> t2 = std::make_shared<Node::Base>(tag2);
+//    std::shared_ptr<Node::Tag> tag3 = std::make_shared<Node::Tag>("c");
+//    std::shared_ptr<Node::Base> t3 = std::make_shared<Node::Base>(tag3);
+//    t1->children = new std::vector<std::shared_ptr<Node::Base>>;
+//    t1->children->push_back(t2);
+//    t1->parrent = new std::vector<std::shared_ptr<Node::Base>>;
+//    t1->parrent->push_back(t3);
+
+    std::shared_ptr<std::string> inp = std::make_shared<std::string>("<html><head><title>KEKEKEKEKEKEK</title></head><body tex='aqua' link = #ff00ff><a href='ya.ru'>yandex</a>dadas</body></html>");
+    Parser::parse(inp);
+    return 0;
 }
 

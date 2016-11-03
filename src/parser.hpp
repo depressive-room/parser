@@ -1,9 +1,9 @@
-#ifndef parser
+ #ifndef parser
 #define parser
 #include <vector>
+#include <iostream>
 #include <string>
 namespace Parser {
-    std::vector<std::string> take_tokins(std::string input);
-    void make_tree(std::vector<std::string>);
+    void parse(std::shared_ptr<std::string> input , size_t size);
 }
 #endif
