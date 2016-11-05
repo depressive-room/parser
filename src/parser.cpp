@@ -8,6 +8,7 @@ namespace Parser{
      {
         std::shared_ptr<Node::Base> root = std::make_shared<Node::Base>();
         std::shared_ptr<Node::Base> curr = root;
+
         std::regex reg("<(/?[^\>]+)>");
         auto str_begin =
             std::sregex_iterator(input->begin(), input->end(), reg);
@@ -17,18 +18,18 @@ namespace Parser{
         for(;!(i==str_end);i++){
              std::smatch match = *i;
              std::string match_str = match.str();
-             if(curr->children == NULL){
-              curr->children = new std::vector<std::shared_ptr<Node::Base>>;
-             }
+//             if(curr->children == NULL){
+//              curr->children = new std::vector<std::shared_ptr<Node::Base>>;
+//             }
                  int pos = match.position();
                  if(pos-last_pos!= 0){
                      std::string text_str = input->substr(last_pos,pos-last_pos);
                      std::shared_ptr<Node::Text> text = std::make_shared<Node::Text>(text_str);
                      std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(text);
                      base->parrent = curr;
-                     base->children = new std::vector<std::shared_ptr<Node::Base>>;
-                     int size = curr->children->size();
-                     curr = curr->children->at(size);
+//                     base->children = new std::vector<std::shared_ptr<Node::Base>>;
+                     curr->children.push_back(base);
+                     curr = curr->children.back();
                      //std::cout<<text_str<<std::endl;
                  }
              std::string tag_str = match[1].str();
@@ -36,19 +37,18 @@ namespace Parser{
              std::shared_ptr<Node::Tag> tag = std::make_shared<Node::Tag>(tag_str);
              std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(tag);
              base->parrent = curr;
-             base->children = new std::vector<std::shared_ptr<Node::Base>>;
+//             base->children = new std::vector<std::shared_ptr<Node::Base>>;
              if(tag_str.at(0) != '/'){
-                 curr->children->push_back(base);
-                 size_t size = curr->children->size();
-                 curr = curr->children->at(size-1);
-
+                 curr->children.push_back(base);
+                 curr = curr->children.back();
+                 //std::cout<<curr->children->at(size-1)->tag->name<<std::endl;
              }else{
                  tmp = tag_str.substr(1,tag_str.length()-1);
+                 std::cout<<curr->parrent->tag->name<<std::endl;
                  do{                        
                      if(curr->parrent->tag->name == tmp){
-                         curr->parrent->children->push_back(base);
-                         int size = curr->children->size();
-                         curr = curr->children->at(size);
+                         curr->children.push_back(base);
+                         curr = curr->parrent->parrent->children.back();
                          break;
                      }
                      curr = curr->parrent;
