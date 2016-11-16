@@ -5,7 +5,7 @@ class Node
 {
 
 public:
-	struct Attr{        
+    struct Attr{
         std::string name;
         std::string value;
         Attr(){
@@ -18,25 +18,24 @@ public:
             this->value = value;
         }
         ~Attr(){
-            }
+        }
 
-	};
+    };
 
 
     struct Tag{
-		std::string name;
-        std::vector<std::shared_ptr<Attr>> *attrs;
+        std::string name;
+        std::vector<Attr> attrs;
 
         Tag(){
             this->name = "";
-            this->attrs = NULL;
         }
 
         Tag(std::string name){
             this->name = name;
         }
 
-        Tag(std::string name, std::vector<std::shared_ptr<Attr>> *attrs){
+        Tag(std::string name, std::vector<Attr> attrs){
             this->name = name;
             this->attrs = attrs;
         }
@@ -58,22 +57,19 @@ public:
     };
 
     struct Base{
-        std::shared_ptr<Tag> tag;
-        std::shared_ptr<Text> text;
-        std::vector<std::shared_ptr<Base>> *children;
-        std::shared_ptr<Base> *parrent;
+        Tag tag;
+        Text text;
+        std::vector<Base> *children;
+        std::shared_ptr<Base> parrent;
         Base(){
-            tag = nullptr;
-            text = nullptr;
-            children = NULL;
             parrent = NULL;
         }
 
-        Base(std::shared_ptr<Tag> tag){
+        Base(Tag tag){
             this->tag = tag;
         }
 
-        Base(std::shared_ptr<Text> text){
+        Base(Text text){
             this->text = text;
         }
 
@@ -81,5 +77,6 @@ public:
 
         }
     };
+
 };
 

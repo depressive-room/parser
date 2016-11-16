@@ -6,10 +6,9 @@
 namespace Parser{
     void parse(std::shared_ptr<std::string> input)
      {
-        std::shared_ptr<Node::Base> root = std::make_shared<Node::Base>();
-        std::shared_ptr<Node::Base> curr = root;
-
         std::regex reg("<(/?[^\>]+)>");
+        std::regex attrs("([A-Za-z0-9]*)='([^']*)'");
+
         auto str_begin =
             std::sregex_iterator(input->begin(), input->end(), reg);
         auto str_end = std::sregex_iterator();
@@ -18,43 +17,28 @@ namespace Parser{
         for(;!(i==str_end);i++){
              std::smatch match = *i;
              std::string match_str = match.str();
-//             if(curr->children == NULL){
-//              curr->children = new std::vector<std::shared_ptr<Node::Base>>;
-//             }
                  int pos = match.position();
                  if(pos-last_pos!= 0){
                      std::string text_str = input->substr(last_pos,pos-last_pos);
-                     std::shared_ptr<Node::Text> text = std::make_shared<Node::Text>(text_str);
-                     std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(text);
-                     base->parrent = curr;
-//                     base->children = new std::vector<std::shared_ptr<Node::Base>>;
-                     curr->children.push_back(base);
-                     curr = curr->children.back();
-                     //std::cout<<text_str<<std::endl;
+                     std::cout<<text_str<<std::endl;
                  }
              std::string tag_str = match[1].str();
-             std::string tmp;
-             std::shared_ptr<Node::Tag> tag = std::make_shared<Node::Tag>(tag_str);
-             std::shared_ptr<Node::Base> base = std::make_shared<Node::Base>(tag);
-             base->parrent = curr;
-//             base->children = new std::vector<std::shared_ptr<Node::Base>>;
-             if(tag_str.at(0) != '/'){
-                 curr->children.push_back(base);
-                 curr = curr->children.back();
-                 //std::cout<<curr->children->at(size-1)->tag->name<<std::endl;
-             }else{
-                 tmp = tag_str.substr(1,tag_str.length()-1);
-                 std::cout<<curr->parrent->tag->name<<std::endl;
-                 do{                        
-                     if(curr->parrent->tag->name == tmp){
-                         curr->children.push_back(base);
-                         curr = curr->parrent->parrent->children.back();
-                         break;
-                     }
-                     curr = curr->parrent;
-                 }while(curr->parrent != nullptr);
+             auto tag_begin =
+                 std::sregex_iterator(tag_str.begin(), tag_str.end(), attrs);
+             auto tag_end = std::sregex_iterator();
+             std::sregex_iterator j = tag_begin;
+             size_t space = tag_str.find_first_of(' ',0);
+             std::string name_tag = tag_str.substr(0,space);
+             std::cout<<name_tag;
+             std::cout<<"(";
+             for(;!(j==tag_end);j++){
+                 std::smatch match = *j;
+                 std::string name = match[1].str();
+                 std::string value = match[2].str();
+                 std::string attr = name + "=" + value + ";";
+                 std::cout<<attr;
              }
-             //std::cout<<tag<<std::endl;
+             std::cout<<")"<<std::endl;
              last_pos = match.position()+match_str.size();
 
         }
@@ -65,22 +49,7 @@ namespace Parser{
 
 int main()
 {
-
-//    std::vector<std::shared_ptr<Node::Attr>> *attrs = new std::vector<std::shared_ptr<Node::Attr>>;
-//    attrs->push_back(std::make_shared<Node::Attr>("src","img.jpg"));
-//    attrs->push_back(std::make_shared<Node::Attr>("href","ya.ru"));
-//    std::shared_ptr<Node::Tag> tag = std::make_shared<Node::Tag>("a",attrs);
-//    std::shared_ptr<Node::Base> t1 = std::make_shared<Node::Base>(tag);
-//    std::shared_ptr<Node::Tag> tag2 = std::make_shared<Node::Tag>("b");
-//    std::shared_ptr<Node::Base> t2 = std::make_shared<Node::Base>(tag2);
-//    std::shared_ptr<Node::Tag> tag3 = std::make_shared<Node::Tag>("c");
-//    std::shared_ptr<Node::Base> t3 = std::make_shared<Node::Base>(tag3);
-//    t1->children = new std::vector<std::shared_ptr<Node::Base>>;
-//    t1->children->push_back(t2);
-//    t1->parrent = new std::vector<std::shared_ptr<Node::Base>>;
-//    t1->parrent->push_back(t3);
-
-    std::shared_ptr<std::string> inp = std::make_shared<std::string>("<html><head><title>KEKEKEKEKEKEK</title></head><body tex='aqua' link = #ff00ff><a href='ya.ru'>yandex</a>dadas</body></html>");
+    std::shared_ptr<std::string> inp = std::make_shared<std::string>("<html><head><title>KEKEKEKEKEKEK</title></head><body tex='aqua' link='#ff00ff'><a href='ya.ru'>yandex</a>dadas</body></html>");
     Parser::parse(inp);
     return 0;
 }
