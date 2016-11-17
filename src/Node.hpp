@@ -1,82 +1,113 @@
 #include <iostream>
 #include <string>
 #include <vector>
-class Node
-{
-
+class Node{
 public:
-    struct Attr{
+    class Attribute{
+    public:
         std::string name;
         std::string value;
-        Attr(){
-            this->name = "";
-            this->value = "";
+
+        Attribute(){
+            name.clear();
+            value.clear();
         }
 
-        Attr(std::string name, std::string value){
-            this->name = name;
-            this->value = value;
-        }
-        ~Attr(){
+        Attribute(std::string _name, std::string _value){
+            name = _name;
+            value = _value;
         }
 
+        ~Attribute(){
+            name.clear();
+            value.clear();
+        }
     };
 
-
-    struct Tag{
+    class Tag{
+    public:
         std::string name;
-        std::vector<Attr> attrs;
+        std::vector<Attribute> attributes;
 
         Tag(){
-            this->name = "";
+            name.clear();
+            attributes.clear();
         }
 
-        Tag(std::string name){
-            this->name = name;
-        }
-
-        Tag(std::string name, std::vector<Attr> attrs){
-            this->name = name;
-            this->attrs = attrs;
+        Tag(std::string _name,std::vector<Attribute> _attributes){
+            name = _name;
+            attributes = _attributes;
         }
 
         ~Tag(){
+            name.clear();
+            attributes.clear();
         }
-
     };
 
-    struct Text{
+
+    class Text{
+    public:
         std::string value;
+
         Text(){
-            this->value= "";
+            value.clear();
         }
 
-        Text(std::string value){
-            this->value = value;
+        Text(std::string _value){
+            value = _value;
         }
+
+        ~Text(){}
     };
 
-    struct Base{
+    class Base{
+    public:
         Tag tag;
         Text text;
-        std::vector<Base> *children;
-        std::shared_ptr<Base> parrent;
+        Base* parrent = nullptr;
+        std::vector<Base> children;
+
         Base(){
-            parrent = NULL;
-        }
 
-        Base(Tag tag){
-            this->tag = tag;
         }
-
-        Base(Text text){
-            this->text = text;
+        Base(Tag _tag){
+            tag = _tag;
+        }
+        Base(Text _text){
+            text = _text;
         }
 
         ~Base(){
 
         }
-    };
 
+
+    };
+    Base root;
+    Base* now = &root;
+    int i = 0;
+    void add_tag(Base base){
+        if(i == 0){
+            root = base;
+        }else {
+            if(base.tag.name.at(0) != '/'){
+                base.parrent = now;
+                now->children.push_back(base);
+                now = &now->children.back();
+            }else{
+                now = now->parrent;
+            }
+
+        }
+        i++;
+
+    }
+
+    void add_text(Base base){
+        base.parrent = now;
+        now->children.push_back(base);
+    }
 };
+
 
