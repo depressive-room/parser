@@ -1,9 +1,11 @@
  #ifndef parser
 #define parser
-#include <vector>
 #include <iostream>
-#include <string>
+#include <vector>
+#include <regex>
+#include <map>
+#include "Node.hpp"
 namespace Parser {
-    void parse(std::shared_ptr<std::string> input , size_t size);
+   std::shared_ptr<Node> parse(std::shared_ptr<std::string> input);
 }
 #endif

@@ -1,10 +1,8 @@
-#include <iostream>
-#include <vector>
-#include <regex>
-#include <Node.hpp>
 #include "parser.hpp"
+
+
 namespace Parser{
-Node* parse(std::shared_ptr<std::string> input)
+std::shared_ptr<Node> parse(std::shared_ptr<std::string> input)
 {
     std::regex reg("<(/?[^\>]+)>");
     std::regex attrs("([A-Za-z0-9]*)='([^']*)'");
@@ -12,7 +10,7 @@ Node* parse(std::shared_ptr<std::string> input)
             std::sregex_iterator(input->begin(), input->end(), reg);
     auto str_end = std::sregex_iterator();
     std::sregex_iterator i = str_begin;
-    Node* tree = new Node;
+    std::shared_ptr<Node> tree = std::make_shared<Node>();
     int last_pos = 0;
     for(;!(i==str_end);i++){
         std::smatch match = *i;
@@ -31,13 +29,13 @@ Node* parse(std::shared_ptr<std::string> input)
         std::sregex_iterator j = tag_begin;
         size_t space = tag_str.find_first_of(' ',0);
         std::string name_tag = tag_str.substr(0,space);
-        std::vector<Node::Attribute> attributes;
+        std::map<std::string,std::string> attributes;
         for(;!(j==tag_end);j++){
             std::smatch match = *j;
             std::string name = match[1].str();
-            std::string value = match[2].str();
-            Node::Attribute attribute(name,value);
-            attributes.push_back(attribute);
+            std::string value = match[2].str();;
+            attributes.insert( std::pair<std::string,std::string>(name,value) );
+
         }
         Node::Tag tag(name_tag,attributes);
         Node::Base base(tag);

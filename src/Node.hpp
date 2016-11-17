@@ -1,40 +1,22 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <map>
 class Node{
 public:
-    class Attribute{
-    public:
-        std::string name;
-        std::string value;
 
-        Attribute(){
-            name.clear();
-            value.clear();
-        }
-
-        Attribute(std::string _name, std::string _value){
-            name = _name;
-            value = _value;
-        }
-
-        ~Attribute(){
-            name.clear();
-            value.clear();
-        }
-    };
 
     class Tag{
     public:
         std::string name;
-        std::vector<Attribute> attributes;
+        std::map<std::string,std::string> attributes;
 
         Tag(){
             name.clear();
             attributes.clear();
         }
 
-        Tag(std::string _name,std::vector<Attribute> _attributes){
+        Tag(std::string _name,std::map<std::string,std::string> _attributes){
             name = _name;
             attributes = _attributes;
         }
