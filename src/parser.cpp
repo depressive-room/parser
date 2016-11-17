@@ -20,7 +20,6 @@ void parse(std::shared_ptr<std::string> input)
         int pos = match.position();
         if(pos-last_pos!= 0){
             std::string text_str = input->substr(last_pos,pos-last_pos);
-            std::cout<<text_str<<std::endl;
             Node::Text text(text_str);
             Node::Base base(text);
             tree->add_text(base);
@@ -32,8 +31,6 @@ void parse(std::shared_ptr<std::string> input)
         std::sregex_iterator j = tag_begin;
         size_t space = tag_str.find_first_of(' ',0);
         std::string name_tag = tag_str.substr(0,space);
-        std::cout<<name_tag;
-        std::cout<<"(";
         std::vector<Node::Attribute> attributes;
         for(;!(j==tag_end);j++){
             std::smatch match = *j;
@@ -41,14 +38,9 @@ void parse(std::shared_ptr<std::string> input)
             std::string value = match[2].str();
             Node::Attribute attribute(name,value);
             attributes.push_back(attribute);
-            std::string attr = name + "=" + value + ";";
-            std::cout<<attr;
         }
-        std::cout<<")"<<std::endl;
         Node::Tag tag(name_tag,attributes);
         Node::Base base(tag);
-
-
         tree->add_tag(base);
         last_pos = match.position()+match_str.size();
 
