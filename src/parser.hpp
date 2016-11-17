@@ -4,8 +4,8 @@
 #include <vector>
 #include <regex>
 #include <map>
-#include "Node.hpp"
+#include "TreeBulider.hpp"
 namespace Parser {
-   std::shared_ptr<Node> parse(std::shared_ptr<std::string> input);
+   std::shared_ptr<Tree::TreeBuilder::FullTree> parse(std::shared_ptr<std::string> input);
 }
 #endif
