@@ -4,7 +4,7 @@
 #include <Node.hpp>
 #include "parser.hpp"
 namespace Parser{
-void parse(std::shared_ptr<std::string> input)
+Node* parse(std::shared_ptr<std::string> input)
 {
     std::regex reg("<(/?[^\>]+)>");
     std::regex attrs("([A-Za-z0-9]*)='([^']*)'");
@@ -45,6 +45,7 @@ void parse(std::shared_ptr<std::string> input)
         last_pos = match.position()+match_str.size();
 
     }
+    return tree;
 }
 
 } 
