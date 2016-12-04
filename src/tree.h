@@ -1,17 +1,38 @@
-#ifndef TREE
-#define TREE
-namespace TreeClasses {
-class Tree {
-public:
+#include <iostream>
+#include <vector>
+#include <map>
+namespace Tree {
 
-class Tag{
+class Base{
+private:
+  bool isText = false;
+
+public:
+    Base* parrent;
+    //Base() = default;
+    Base(bool val):isText(val){ }
+    ~Base() = default;
+
+    bool text(){
+        return isText;
+    }
+
+};
+
+class Tag
+        : public Base
+{
 public:
     std::string name;
-    std::map<std::string,std::string> attributes;
+    std::map <std::string,std::string> attributes;
+    std::vector<Base> children;
 
-    Tag() = default;
 
-    Tag(std::string _name,std::map<std::string,std::string> _attributes){
+    Tag():Base(false) {}
+
+    Tag
+    (std::string _name,std::map<std::string,std::string> _attributes) : Base(false)
+    {
         name = _name;
         attributes = _attributes;
     }
@@ -19,44 +40,17 @@ public:
     ~Tag() = default;
 };
 
-
-class Text{
+class Text : public Base{
 public:
     std::string value;
-
-    Text() = default;
-
-    Text(std::string _value){
-        value = _value;
-    }
+    Text():Base(true){}
 
     ~Text() = default;
-};
 
-class Base{
-public:
-    Tag tag;
-    Text text;
-    Base* parrent = nullptr;
-    std::vector<Base> children;
-
-    Base()= default;
-    Base(Tag _tag){
-        tag = _tag;
+    Text(std::string in_value):Base(true){
+        this->value = in_value;
     }
-    Base(Text _text){
-        text = _text;
-    }
-
-    ~Base()= default;
-
-};
 };
 
-struct FullTree{
-TreeClasses::Tree::Base root;
-};
 }
-
-#endif // TREE
 

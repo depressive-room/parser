@@ -1,9 +1,9 @@
-#include "parser.hpp"
+#include "parser.h"
 
 
 namespace Parser{
 
-std::shared_ptr<TreeClasses::FullTree> parse(std::shared_ptr<std::string> input)
+std::shared_ptr<Tree::Base> parse(std::shared_ptr<std::string> input)
 {
     std::regex reg("<(/?[^\>]+)>");
     std::regex attrs("([A-Za-z0-9]*)='([^']*)'");
@@ -11,7 +11,7 @@ std::shared_ptr<TreeClasses::FullTree> parse(std::shared_ptr<std::string> input)
             std::sregex_iterator(input->begin(), input->end(), reg);
     auto str_end = std::sregex_iterator();
     std::sregex_iterator i = str_begin;
-    std::shared_ptr<TreeClasses::TreeBuilder> b = std::make_shared<TreeClasses::TreeBuilder>();
+    std::shared_ptr<TreeBuilder> b = std::make_shared<TreeBuilder>();
     int last_pos = 0;
     for(;!(i==str_end);i++){
         std::smatch match = *i;
@@ -20,9 +20,8 @@ std::shared_ptr<TreeClasses::FullTree> parse(std::shared_ptr<std::string> input)
         if(pos-last_pos!= 0){
 
             std::string text_str = input->substr(last_pos,pos-last_pos);
-            TreeClasses::Tree::Text text(text_str);
-            TreeClasses::Tree::Base base(text);
-            b->add_text(base);
+            Tree::Base *text = new Tree::Text(text_str);
+            b->add_text(text);
         }
         std::string tag_str = match[1].str();
         auto tag_begin =
@@ -39,13 +38,12 @@ std::shared_ptr<TreeClasses::FullTree> parse(std::shared_ptr<std::string> input)
             attributes.insert( std::pair<std::string,std::string>(name,value) );
 
         }
-        TreeClasses::Tree::Tag tag(name_tag,attributes);
-        TreeClasses::Tree::Base base(tag);
-        b->add_tag(base);
+        Tree::Base *tag = new Tree::Tag(name_tag,attributes);
+        b->add_tag(tag);
         last_pos = match.position()+match_str.size();
 
     }
-    return std::make_shared<TreeClasses::FullTree>(b->finishTree);
+    return std::make_shared<Tree::Base>(b->root);
 }
 
 } 
