@@ -26,7 +26,7 @@ namespace Parser {
             std::string name;
             std::map <std::string,std::string> attributes;
             std::vector<boost::variant<Tag,Text>> children;
-            Tag* parrent = nullptr;
+            boost::variant<Tag,Text>* parrent = nullptr;
 
             Tag(){}
 
