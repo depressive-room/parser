@@ -1,31 +1,10 @@
 project parser
-	:
-		# Конкретизируем параметры сборки; линковка статическая, чтобы не париться
-		requirements <link>static <threading>multi <variant>release
+	: build-dir build
+	: requirements <link>static <threading>multi <variant>release
 	;
-
-
-# Получаем путь до boost и подключаем его к своему проекту
 import os ;
 BOOST_ROOT = [ os.environ BOOST_ROOT ] ;
 use-project boost : $(BOOST_ROOT) ;
 
-
-# Актуально только для сети (в остальных проектах if-else ниже писать не надо):
-# дополнительно подключаем библиотеку винды для работы с сокетами
-if [ os.name ] = NT
-{
-	lib ws2_32 : : <name>ws2_32 ;
-	alias another-libs : ws2_32 ;
-}
-else
-{
-	alias another-libs ;
-}
-
-
-# Теперь библиотеки буста подключаются проще: /boost/имя_библиотеки
-# Это работает только для компилируемых библиотек, для работы header-only библиотек буста
-# (включая asio и др.) необходимо подключить одну из компилируемых библиотек, (напр. /boost/system)
-exe parser : [ glob-tree *.cpp *.hpp : ] /boost/filesystem another-libs ;
+lib parser : [ glob-tree *.cpp *.hpp : main.cpp ] /boost/filesystem : <link>static ;
 install inst-parser : parser : <location>build/bin ;

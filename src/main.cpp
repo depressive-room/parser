@@ -26,7 +26,7 @@ void walk(boost::variant<Parser::Tree::Tag,Parser::Tree::Text> root){
 
 int main(){
     std::shared_ptr<std::string> input = std::make_shared<std::string>("<html><head><title>KEKEKEKEEK</title></head><body text='aqua' font-size='5'><a href='ya.ru'>yandex</a></body></html>");
-    Parser::Tree::Tree tree = Parser::parse(input);
+    Parser::Tree tree = Parser::parse(input);
     Parser::Tree::Tag root = boost::get<Parser::Tree::Tag>(tree.root);
 	walk(tree.root);
     return 0;

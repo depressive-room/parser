@@ -3,7 +3,7 @@
 
 namespace Parser{
 
-Tree::Tree parse(std::shared_ptr<std::string> input)
+Tree parse(std::shared_ptr<std::string> input)
 {
     std::regex reg("<(/?[^\>]+)>");
         std::regex attrs("([A-Za-z0-9]*)='([^']*)'");

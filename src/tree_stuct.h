@@ -1,16 +1,19 @@
+#ifndef tree_struct
+#define tree_struct
 #include <string>
 #include <vector>
 #include "boost/variant.hpp"
 
 #include <map>
 namespace Parser {
-    namespace Tree {
-    class Tag;
+        struct Tree{
+
+		class Tag;
         class Text
         {
         public:
             std::string value;
-            Tag* parrent = nullptr;
+            Tag* parent = nullptr;
             Text();
 
             ~Text() = default;
@@ -26,7 +29,7 @@ namespace Parser {
             std::string name;
             std::map <std::string,std::string> attributes;
             std::vector<boost::variant<Tag,Text>> children;
-            boost::variant<Tag,Text>* parrent = nullptr;
+            boost::variant<Tag,Text>* parent = nullptr;
 
             Tag(){}
 
@@ -40,11 +43,8 @@ namespace Parser {
 
             ~Tag() = default;
         };
-
-
-        struct Tree{
-            boost::variant<Tag,Text> root;
+        boost::variant<Tag,Text> root;
         };
-    }
+    
 }
-
+#endif

@@ -1,4 +1,4 @@
- #ifndef parser
+#ifndef parser
 #define parser
 #include <iostream>
 #include <vector>
@@ -6,7 +6,7 @@
 #include <map>
 #include "tree_builder.h"
 namespace Parser {
-   Tree::Tree parse(std::shared_ptr<std::string> input);
+   Tree parse(std::shared_ptr<std::string> input);
    
 }
 #endif
