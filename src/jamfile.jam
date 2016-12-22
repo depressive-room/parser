@@ -1,0 +1,8 @@
+lib parser 
+	: [ glob-tree *.cpp *.hpp : main.cpp ]
+	: <link>static
+	;
+
+exe parser_test : main.cpp parser/<link>static ;
+install install_parser_test : parser_test : <location>build/bin ;
+
